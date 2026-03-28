@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Ranker - Rank Your Favorites</title>
+    <meta name="description"
+        content="Rank every song with this interactive tool. Discover your favorites and share your list with friends.">
+    <link rel="icon" type="image/x-icon" href="./Art/favicon.ico">
+    <meta name="darkreader-lock">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" id="meta-og-title" content="Song Ranker">
+    <meta property="og:description" id="meta-og-desc" content="Which song is the best? Rank them all here!">
+
+    <!-- Twitter Metadata -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" id="meta-tw-title" content="Song Ranker">
+    <meta property="twitter:description" id="meta-tw-desc" content="Rank every song. No tier lists, just choices.">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="stats-bar">
+        <div class="stats-left">
+            <button id="settings-btn" class="icon-btn">☰</button>
+        </div>
+        <span id="vote-stat">TOTAL VOTES: ...</span>
+        <span id="personal-vote-stat" style="color: var(--accent-color);">YOUR VOTES: 0</span>
+    </div>
+    <div class="main-container">
+        <div class="arena-container">
+            <div class="game-toggle" id="franchise-toggles">
+                <!-- JS will inject buttons here from CONFIG -->
+            </div>
+            <h1 id="main-title">Which song is better?</h1>
+            <div class="arena">
+                <div id="songA-card" class="song-card">
+                    <div id="songA-rank" class="song-rank"></div>
+                    <h2 id="songA-name"></h2>
+                    <div class="card-controls">
+                        <button class="preview-btn" data-song="A">Preview</button>
+                        <button class="full-play-btn" data-song="A">Play Full</button>
+                    </div>
+                    <div class="agreement-percent" id="songA-agreement"></div>
+                </div>
+                <div class="vs" id="vs-text">VS</div>
+                <div id="songB-card" class="song-card">
+                    <div id="songB-rank" class="song-rank"></div>
+                    <h2 id="songB-name"></h2>
+                    <div class="card-controls">
+                        <button class="preview-btn" data-song="B">Preview</button>
+                        <button class="full-play-btn" data-song="B">Play Full</button>
+                    </div>
+                    <div class="agreement-percent" id="songB-agreement"></div>
+                </div>
+            </div>
+            <button id="next-matchup-btn" class="choice-btn" style="display: none; margin-bottom: 20px;">Next Matchup</button>
+            <div class="choices">
+                <button id="chooseA-btn" class="choice-btn">Choose A</button>
+                <button id="undo-btn" class="choice-btn" disabled>Undo</button>
+                <button id="tie-btn" class="choice-btn">Tie / Skip</button>
+                <button id="chooseB-btn" class="choice-btn">Choose B</button>
+            </div>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <div id="progress-text"></div>
+            </div>
+            <div class="controls">
+                <a id="kofi-link" target="_blank" rel="noopener noreferrer">
+                    <button id="kofi-btn">Support (Ko-fi)</button>
+                </a>
+                <button id="toggle-rankings-btn" class="choice-btn">Show Rankings</button>
+                <button id="suggest-btn" class="choice-btn">Suggest Feature</button>
+                <a id="discord-link" target="_blank" rel="noopener noreferrer">
+                    <button id="discord-btn" class="choice-btn">Discord</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="ranking-container">
+            <div id="top-donor-slot" class="donor-spotlight" style="display: none;"></div>
+            <div class="ranking-header">
+                <button id="my-ranking-btn" class="ranking-toggle-btn active">My Rank</button>
+                <button id="community-ranking-btn" class="ranking-toggle-btn">Global</button>
+            </div>
+
+            <div class="filter-tabs">
+                <select id="main-filter-select" class="filter-btn active">
+                    <option value="all">All Songs (Original)</option>
+                    <!-- JS will inject optgroups here -->
+                    <optgroup label="Filter by Length">
+                        <option value="duration_30">Hide songs < 30s</option>
+                        <option value="duration_20">Hide songs < 20s</option>
+                        <option value="duration_10">Hide songs < 10s</option>
+                    </optgroup>
+                    <optgroup label="Custom Lists" id="custom-lists-optgroup"></optgroup>
+                </select>
+                <button id="edit-list-btn" class="filter-btn" title="Edit Current List" style="display: none;">✎</button>
+                <button id="create-list-btn" class="filter-btn" title="Create New List">+</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="ranking-search" placeholder="Search songs...">
+            </div>
+
+            <div class="ranking-actions">
+                <button id="play-list-btn" class="action-btn">Play This List</button>
+                <button id="export-list-btn" class="action-btn">Export Playlist</button>
+                <button id="share-btn" class="action-btn">Share Ranking</button>
+            </div>
+
+            <ul id="ranking-list"></ul>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div id="music-player-bar" class="hidden">
+        <div class="player-info">
+            <span id="player-song-name">Now Playing...</span>
+        </div>
+        <div class="progress-area">
+            <span id="player-current-time">0:00</span>
+            <input type="range" id="player-progress" min="0" max="100" value="0" step="0.1">
+            <span id="player-duration">0:00</span>
+        </div>
+        <div class="player-controls">
+            <button id="player-prev-btn">⏮</button>
+            <button id="player-play-btn">⏯</button>
+            <button id="player-next-btn">⏭</button>
+            <button id="player-close-btn">✖</button>
+        </div>
+        <div class="volume-control">
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" title="Volume">
+        </div>
+        <audio id="playlist-audio"></audio>
+    </div>
+
+    <!-- Modals (Simplified for Skeleton) -->
+    <!-- ... sharing, custom lists, export, etc. -->
+    <div id="share-modal" class="modal-overlay" style="display: none;">
+        <!-- ... content ... -->
+    </div>
+
+    <!-- Redundant Modals Omitted for Brevity in this View, but they should be kept and generalized -->
+
+    <audio id="audioA"></audio>
+    <audio id="audioB"></audio>
+
+    <footer>
+        <p class="credits">
+            <span id="footer-credits">Project Credits</span> |
+            <a href="donors.html">Yearbook</a>
+            <a href="stats.html" id="secret-stats-link" style="display: none;">Stats</a>
+            <a id="github-link" target="_blank">GitHub</a>
+        </p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
+    <script src="config.js"></script>
+    <script src="song_data.js"></script>
+    <script src="donor_data.js"></script>
+    <script src="cursor.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Custom Settings Modal -->
+    <div id="settings-modal" style="display: none;">
+        <!-- ... content generated by JS or simplified ... -->
+    </div>
+</body>
+
+</html>
