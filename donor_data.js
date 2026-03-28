@@ -11,10 +11,10 @@
 var DONOR_DATA = {
     // This is the person who gets the big slot above the leaderboard.
     currentTopDonor: {
-        name: "STAVROS",
+        name: "EXAMPLE DONOR",
         month: "MARCH 2026",
-        pfp: "Art/peeringSoul.png", // make sure to add the actual file later
-        quote: "I made this site and all I got was this lousy donor slot.",
+        pfp: "Art/peeringSoul.png", 
+        quote: "This is a placeholder quote for the top donor.",
         styling: {
             borderColor: "var(--accent-color)",
             glowColor: "var(--accent-color)",
@@ -28,9 +28,9 @@ var DONOR_DATA = {
             month: "MARCH 2026",
             donors: [
                 {
-                    name: "STAVROS",
+                    name: "EXAMPLE DONOR",
                     pfp: "Art/peeringSoul.png",
-                    quote: "I made this site and all I got was this lousy donor slot.",
+                    quote: "Placeholder quote for the history section.",
                     styling: {
                         borderColor: "var(--accent-color)",
                         glowColor: "var(--accent-color)"

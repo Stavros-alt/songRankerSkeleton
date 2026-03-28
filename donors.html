@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deltarune Ranker - Donor Yearbook</title>
+    <title>Song Ranker - Donor Yearbook</title>
     <link rel="icon" type="image/x-icon" href="Art/favicon.ico">
     <meta name="darkreader-lock">
     <link rel="stylesheet" href="style.css">
@@ -82,9 +82,9 @@
             });
         });
 
-        // cursor logic because everything is a mess
-        const cursorSettings = JSON.parse(localStorage.getItem('rankerSettings') || '{}');
-        if (cursorSettings.systemCursor) {
+        const config = window.RANKER_CONFIG || { defaults: { currentGame: 'example' } };
+        const cursorSettings = JSON.parse(localStorage.getItem(`${config.defaults.currentGame}RankerGlobalState`) || '{}');
+        if (cursorSettings.useSystemCursor) {
             document.body.classList.add('system-cursor');
         }
     </script>

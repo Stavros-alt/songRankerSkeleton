@@ -23,8 +23,8 @@ const CONFIG = {
     
     // supabase settings. don't leak your keys.
     supabase: {
-        url: 'https://tsqubxgafnzmxejwknbm.supabase.co',
-        key: 'sb_publishable_ZYm_PTc6nIPS6t7MKsWKrQ_pwSiLCq2'
+        url: 'https://your-project.supabase.co',
+        key: 'your-anon-key'
     },
     
     // social links. change these or people will bother me.

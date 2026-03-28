@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const SUPABASE_URL = 'https://tsqubxgafnzmxejwknbm.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_ZYm_PTc6nIPS6t7MKsWKrQ_pwSiLCq2';
+    const config = window.RANKER_CONFIG || { supabase: { url: '', key: '' } };
+    const SUPABASE_URL = config.supabase.url || 'https://your-project.supabase.co';
+    const SUPABASE_KEY = config.supabase.key || 'your-anon-key';
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -11,19 +12,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     Chart.defaults.font.family = "'Roboto Mono', monospace";
 
     async function fetchData() {
-        const [drRes, utRes, utyRes, tsusRes] = await Promise.all([
-            supabase.from('songs').select('id, name, rating, comparisons').order('rating', { ascending: false }),
-            supabase.from('ut_songs').select('id, name, rating, comparisons').order('rating', { ascending: false }),
-            supabase.from('uty_songs').select('id, name, rating, comparisons').order('rating', { ascending: false }),
-            supabase.from('tsus_songs').select('id, name, rating, comparisons').order('rating', { ascending: false })
-        ]);
+        // you'll need to update this to match your supabase tables if you use it.
+        const { data, error } = await supabase.from('songs').select('id, name, rating, comparisons').order('rating', { ascending: false });
 
-        if (drRes.error || utRes.error || utyRes.error || tsusRes.error) {
-            console.error("Error fetching data:", drRes.error || utRes.error || utyRes.error || tsusRes.error);
-            alert("Failed to load stats.");
+        if (error) {
+            console.error("Error fetching data:", error);
+            // alert("Failed to load stats.");
             return [];
         }
-        return [...drRes.data, ...utRes.data, ...utyRes.data, ...tsusRes.data].sort((a, b) => b.rating - a.rating);
+        return data.sort((a, b) => b.rating - a.rating);
     }
 
     async function fetchFelfebStats() {

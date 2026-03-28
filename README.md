@@ -11,6 +11,10 @@ Example: `python3 -m http.server`
 2. Configure `config.js`.
 3. Open `index.html`.
 
+## Credits
+Original created by Stavros.
+[GitHub](https://github.com/stavros-alt/drSongRanker) | [Ko-fi](https://ko-fi.com/stavros916)
+
 ## Features
 - Elo ranking system
 - Custom list support
